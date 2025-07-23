@@ -1,7 +1,7 @@
 spring:
   kafka:
     producer:
-      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka1:19092,kafka2:19092,kafka3:19092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       acks: all
@@ -11,6 +11,13 @@ spring:
         request.timeout.ms: 10000
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5
+    topic:
+      weather:
+        name: weather-forecast-topic
+        partitions: 3
+        replicas: 3
+        configs:
+          min.insync.replicas: "2"
   docker:
     compose:
       enabled: false
