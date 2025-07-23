@@ -1,0 +1,6 @@
+# Настройки IntelliJ IDEA
+.idea/
+*.iml
+
+# Логи
+*.log

@@ -1,12 +1,15 @@
 spring:
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka1:19092,kafka2:19092,kafka3:19092}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      group-id: product-created-events
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-        spring.json.trusted.packages: ru.larkin.shared
-server:
-  port: 8081
+        spring.json.trusted.packages: '*'
+    producer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka1:19092,kafka2:19092,kafka3:19092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topic:
+      weather:
+        name: weather-forecast-topic

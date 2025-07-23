@@ -87,22 +87,45 @@ services:
     networks:
       - kafka-net
 
-#  spring-app:
-#    build: .
-#    container_name: spring-app
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
-#    depends_on:
-#      kafka1:
-#        condition: service_healthy
-#      kafka2:
-#        condition: service_healthy
-#      kafka3:
-#        condition: service_healthy
-#    networks:
-#      - kafka-net
+  producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    container_name: producer
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19092,kafka3:19092
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    networks:
+      - kafka-net
+
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    container_name: consumer
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19092,kafka3:19092
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    volumes:
+      - ./logs/consumer:/app/logs
+    networks:
+      - kafka-net
 
 volumes:
   kafka1-data:
